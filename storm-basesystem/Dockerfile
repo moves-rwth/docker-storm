@@ -11,10 +11,13 @@ FROM $LINUX_BASE
 MAINTAINER Matthias Volk <m.volk@utwente.nl>
 
 ENV DEBIAN_FRONTEND=noninteractive
+
 # Install dependencies
+# - ca-certificates is needed for cloning from Github
+# - all other dependencies are the recommended packages for Storm (see https://www.stormchecker.org/documentation/obtain-storm/dependencies.html#-debian-and--ubuntu)
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    ca-certificates \
     build-essential \
-    ruby \
     git \
     cmake \
     libboost-all-dev \
