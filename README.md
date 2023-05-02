@@ -4,8 +4,8 @@ All Docker containers related to Storm are hosted at the [movesrwth organization
 The Dockerfiles are present in the corresponding repositories.
 
 ## File structure
-- [storm-basesystem]: Dockerfile and build script for the Linux base images with the dependencies required by Storm.
-- [carl-storm]: Build script for [Carl-storm library](https://github.com/moves-rwth/carl-storm).
+- [storm-basesystem](storm-basesystem): Dockerfile and build script for the Linux base images with the dependencies required by Storm.
+- [carl-storm](carl-storm): Build script for [Carl-storm library](https://github.com/moves-rwth/carl-storm).
 
 ## Configuration options
 - The configuration options are given at the top of each Dockerfile.
