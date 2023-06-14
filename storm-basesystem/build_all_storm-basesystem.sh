@@ -34,6 +34,12 @@ docker build --no-cache --pull -t movesrwth/storm-basesystem:ubuntu-23.04 --buil
 docker push movesrwth/storm-basesystem:ubuntu-23.04
 echo "### Building Ubuntu 23.04 base finished."
 
+# Build Debian 12 "Bookworm"
+echo "### Building Debian 12 base..."
+docker build --no-cache --pull -t movesrwth/storm-basesystem:debian-12 --build-arg LINUX_BASE=debian:12 .
+docker push movesrwth/storm-basesystem:debian-12
+echo "### Building Debian 12 base finished."
+
 # Build latest Ubuntu release version
 echo "### Building latest Ubuntu base..."
 docker build --no-cache --pull -t movesrwth/storm-basesystem:latest .
