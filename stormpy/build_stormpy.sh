@@ -3,7 +3,8 @@ set -e
 
 # Build images for stormpy
 ##########################
-# This script downloads a clean Storm repository and uses the Dockerfile available in the stormpy repository to create the Docker images.
+# This script downloads a clean stormpy repository and uses the Dockerfile available in the stormpy repository to create the Docker images.
+# Set version=stable to build images for the stable branch of stormpy.
 
 version=1.8.0
 
@@ -20,10 +21,3 @@ echo "### Building docker image for stormpy $version in debug configuration ..."
 docker build --no-cache --pull --build-arg build_type=Debug --build-arg setup_args="--debug" --build-arg BASE_IMAGE=movesrwth/storm:$version-debug -t movesrwth/stormpy:$version-debug .
 docker push movesrwth/stormpy:$version-debug
 echo "### Building docker image for stormpy $version in debug configuration finished."
-
-echo "### Updating stable images ..."
-docker image tag movesrwth/stormpy:$version movesrwth/stormpy:stable
-docker push movesrwth/stormpy:stable
-docker image tag movesrwth/stormpy:$version-debug movesrwth/stormpy:stable-debug
-docker push movesrwth/stormpy:stable-debug
-echo "### Updating stable images finished."

@@ -3,6 +3,8 @@ set -e
 
 # Build images for Carl-storm library
 #####################################
+# This script downloads a clean Carl-storm repository and uses the Dockerfile available in the Carl-storm repository to create the Docker images.
+# Set version=stable to build images for the stable branch of Carl-storm.
 
 version=14.25
 
