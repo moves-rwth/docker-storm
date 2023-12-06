@@ -4,12 +4,6 @@ set -e
 # Build all images of Linux systems currently supporting Storm
 ##############################################################
 
-# Build Debian 10 "Buster"
-echo "### Building Debian 10 base..."
-docker build --no-cache --pull -t movesrwth/storm-basesystem:debian-10 --build-arg LINUX_BASE=debian:10 .
-docker push movesrwth/storm-basesystem:debian-10
-echo "### Building Debian 10 base finished."
-
 # Build Ubuntu 20.04 LTS "Focal Fossa"
 echo "### Building Ubuntu 20.04 base..."
 docker build --no-cache --pull -t movesrwth/storm-basesystem:ubuntu-20.04 --build-arg LINUX_BASE=ubuntu:20.04 .
@@ -28,17 +22,17 @@ docker build --no-cache --pull -t movesrwth/storm-basesystem:ubuntu-22.04 --buil
 docker push movesrwth/storm-basesystem:ubuntu-22.04
 echo "### Building Ubuntu 22.04 base finished."
 
-# Build Ubuntu 23.04 "Lunar Lobster"
-echo "### Building Ubuntu 23.04 base..."
-docker build --no-cache --pull -t movesrwth/storm-basesystem:ubuntu-23.04 --build-arg LINUX_BASE=ubuntu:23.04 .
-docker push movesrwth/storm-basesystem:ubuntu-23.04
-echo "### Building Ubuntu 23.04 base finished."
-
 # Build Debian 12 "Bookworm"
 echo "### Building Debian 12 base..."
 docker build --no-cache --pull -t movesrwth/storm-basesystem:debian-12 --build-arg LINUX_BASE=debian:12 .
 docker push movesrwth/storm-basesystem:debian-12
 echo "### Building Debian 12 base finished."
+
+# Build Ubuntu 23.10 "Lunar Lobster"
+echo "### Building Ubuntu 23.10 base..."
+docker build --no-cache --pull -t movesrwth/storm-basesystem:ubuntu-23.10 --build-arg LINUX_BASE=ubuntu:23.10 .
+docker push movesrwth/storm-basesystem:ubuntu-23.10
+echo "### Building Ubuntu 23.10 base finished."
 
 # Build latest Ubuntu release version
 echo "### Building latest Ubuntu base..."

@@ -8,7 +8,7 @@
 # Set Linux base image
 ARG LINUX_BASE=ubuntu:rolling
 FROM $LINUX_BASE
-MAINTAINER Matthias Volk <m.volk@utwente.nl>
+MAINTAINER Matthias Volk <m.volk@tue.nl>
 
 ENV DEBIAN_FRONTEND=noninteractive
 
