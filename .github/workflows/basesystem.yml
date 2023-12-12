@@ -1,0 +1,59 @@
+name: Build basesystem
+# Builds the Storm basesystem Docker images and deploys them to Dockerhub
+
+on:
+  push:
+  # needed to trigger the workflow manually
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  buildDistro:
+    name: Build  for ${{ matrix.distro.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro:
+          - {name: "ubuntu-20.04", baseImg: "ubuntu:20.04"}
+          - {name: "debian-11", baseImg: "debian:11"}
+          - {name: "ubuntu-22.04", baseImg: "ubuntu:22.04"}
+          - {name: "debian-12", baseImg: "debian:12"}
+          - {name: "ubuntu-23.10", baseImg: "ubuntu:23.10"}
+          - {name: "latest", baseImg: "ubuntu:latest"}
+    steps:
+      - name: Git clone
+        uses: actions/checkout@v4
+      - name: Build from Dockerfile
+        run: docker build -f storm-basesystem/Dockerfile -t movesrwth/storm-basesystem:${{ matrix.distro.name }} . --build-arg LINUX_BASE=${{ matrix.distro.baseImg }}
+      - name: Login into docker
+        # Only login if using main on original repo (and not for pull requests or forks)
+        if: github.repository_owner == 'moves-rwth' && github.ref == 'refs/heads/main'
+        run: echo "${{ secrets.STORM_CI_DOCKER_PASSWORD }}" | docker login -u "${{ secrets.STORM_CI_DOCKER_USERNAME }}" --password-stdin
+      - name: Deploy image
+        # Only deploy if using main on original repo (and not for pull requests or forks)
+        if: github.repository_owner == 'moves-rwth' && github.ref == 'refs/heads/main'
+        run: |
+          docker push movesrwth/storm-basesystem:${{ matrix.distro.name }}
+
+  notify:
+    name: Email notification
+    runs-on: ubuntu-latest
+    needs: [buildDistro]
+    # Only run in main repo and even if previous step failed
+    if: github.repository_owner == 'moves-rwth' && always()
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v3
+      - uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.STORM_CI_MAIL_SERVER }}
+          server_port: 587
+          username: ${{ secrets.STORM_CI_MAIL_USERNAME }}
+          password: ${{ secrets.STORM_CI_MAIL_PASSWORD }}
+          subject: "[You broke it] CI run failed for ${{ github.repository }}"
+          body:
+            "CI job of ${{ github.repository }} has failed for commit ${{ github.sha }}.\n\
+            The error type is: ${{ env.WORKFLOW_CONCLUSION }}.\n\n\
+            For more information, see https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          to: ${{ secrets.STORM_CI_MAIL_RECIPIENTS }}
+          from: Github Actions <you-broke-it@stormchecker.org>
+        if: env.WORKFLOW_CONCLUSION != 'success' # notify only if failure
