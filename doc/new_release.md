@@ -11,8 +11,12 @@ The following steps should be performed after releasing a new Storm version.
    * Run the script `storm-basesystem/build_all_storm-basesystem.sh` to create Docker containers as base for Storm for all currently supported Linux systems.
 
 4. Create carl
-   * (Optional) update the Carl version in `carl/build_carl.sh`.
-   * Run the script `carl/build_carl.sh` to create Docker containers for the Carl library.
+   * (Optional) update the Carl version in `carl-storm/build_carl-storm.sh`.
+   * Run the script `carl-storm/build_carl-storm.sh` to create Docker containers for the Carl library.
+
+5. Create storm-dependencies
+   * (Optional) update the Carl version in `storm-dependencies/build_storm-dependencies.sh`.
+   * Run the script `storm-dependencies/build_storm-dependencies.sh` to create Docker containers containing the dependencies for Storm (carl, Spot, MathSAT, SoPlex).
 
 5. Create Storm:
    * Set the new `version` of Storm in `storm/build_storm.sh`.

@@ -3,7 +3,7 @@ set -e
 
 # Install (optional) dependencies for Storm
 ###########################################
-carl_version=14.26
+carl_version=14.27
 
 echo "### Building docker image for dependencies of Storm ..."
 docker build --no-cache --pull --build-arg BASE_IMAGE=movesrwth/carl-storm:$carl_version -t movesrwth/storm-dependencies:latest .
