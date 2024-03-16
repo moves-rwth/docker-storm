@@ -16,7 +16,7 @@ MAINTAINER Matthias Volk <m.volk@tue.nl>
 # Specify MathSAT version
 ARG mathsat_version=5.6.10
 # Specify SoPlex version
-ARG soplex_version=604
+ARG soplex_version=700
 
 # Carl-storm is already installed in the base image
 
