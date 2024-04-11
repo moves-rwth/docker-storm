@@ -1,0 +1,27 @@
+# Base Dockerfile for Storm dependencies
+########################################
+# The Docker image can be built by executing:
+# docker build -f Dockerfile.minimal_dependencies -t movesrwth/storm-basesystem:minimal_dependencies .
+# A different Linux base system image can be set from the commandline with:
+# --build-arg LINUX_BASE=<new_base_image>
+
+# Set Linux base image
+ARG LINUX_BASE=ubuntu:rolling
+FROM $LINUX_BASE
+MAINTAINER Matthias Volk <m.volk@tue.nl>
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies
+# - ca-certificates is needed for cloning from Github
+# - all other dependencies are the recommended packages for Storm (see https://www.stormchecker.org/documentation/obtain-storm/dependencies.html#-debian-and--ubuntu)
+RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    build-essential \
+    git \
+    cmake \
+    libboost-all-dev \
+    libgmp-dev \
+    automake \
+    libglpk-dev \
+    libhwloc-dev
