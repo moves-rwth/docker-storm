@@ -17,6 +17,9 @@ MAINTAINER Matthias Volk <m.volk@tue.nl>
 ARG mathsat_version=5.6.10
 # Specify SoPlex version
 ARG soplex_version=700
+# Specify gurobi version
+ARG GRB_VERSION=11.0.2
+ARG GRB_SHORT_VERSION=11.0
 
 # Carl-storm is already installed in the base image
 
@@ -48,3 +51,23 @@ RUN tar -xzf soplex.tar.gz && rm soplex.tar.gz && mv soplex-release-$soplex_vers
 RUN mkdir soplex/build
 WORKDIR /opt/soplex/build
 RUN cmake .. && make && make install
+
+# Install Gurobi
+#################
+# From https://github.com/Gurobi/docker-optimizer/blob/master/11.0.0/Dockerfile
+WORKDIR /opt
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y\
+       ca-certificates  \
+       wget \
+    && update-ca-certificates \
+    && wget -v https://packages.gurobi.com/${GRB_SHORT_VERSION}/gurobi${GRB_VERSION}_linux64.tar.gz \
+    && tar -xvf gurobi${GRB_VERSION}_linux64.tar.gz  \
+    && rm -f gurobi${GRB_VERSION}_linux64.tar.gz \
+    && mv -f gurobi* gurobi \
+    && rm -rf gurobi/linux64/docs
+
+ENV GUROBI_HOME /opt/gurobi/linux64
+ENV PATH $PATH:$GUROBI_HOME/bin
+ENV LD_LIBRARY_PATH $GUROBI_HOME/lib
