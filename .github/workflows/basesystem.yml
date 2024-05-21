@@ -16,7 +16,7 @@ jobs:
           - {name: "debian-11", baseImg: "debian:11"}
           - {name: "ubuntu-22.04", baseImg: "ubuntu:22.04"}
           - {name: "debian-12", baseImg: "debian:12"}
-          - {name: "ubuntu-23.10", baseImg: "ubuntu:23.10"}
+          - {name: "ubuntu-24.04", baseImg: "ubuntu:24.04"}
           - {name: "latest", baseImg: "ubuntu:rolling"}
     steps:
       - name: Git clone
