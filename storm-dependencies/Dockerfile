@@ -1,7 +1,7 @@
 # Dockerfile installing all dependencies for Storm
 ##################################################
 # The Docker image can be built by executing:
-# docker build -t yourusername/storm-deps .
+# docker build -t yourusername/storm-dependencies .
 # A different base image can be set from the commandline with:
 # --build-arg BASE_IMAGE=<new_base_image>
 
@@ -13,61 +13,78 @@ MAINTAINER Matthias Volk <m.volk@tue.nl>
 # Specify configurations
 # These configurations can be set from the commandline with:
 # --build-arg <config_name>=<value>
-# Specify MathSAT version
-ARG mathsat_version=5.6.10
-# Specify SoPlex version
-ARG soplex_version=700
-# Specify gurobi version
-ARG GRB_VERSION=11.0.2
-ARG GRB_SHORT_VERSION=11.0
+
+# Specify library versions
+ARG MATHSAT_VERSION=5.6.10
+ARG SPOT_VERSION=2.12
+ARG SOPLEX_VERSION=700
+ARG GUROBI_VERSION=11.0.2
+ARG GUROBI_SHORT_VERSION=11.0
 
 # Carl-storm is already installed in the base image
 
+
 # Install additional packages
 #############################
-RUN apt-get -y update; apt-get -y install curl gnupg2 wget
+RUN apt-get -y update; apt-get -y install ca-certificates curl gnupg2 wget
 
 
 # Install Spot
 ##############
-RUN wget -q -O - https://www.lrde.epita.fr/repo/debian.gpg | apt-key add -
-RUN echo 'deb http://www.lrde.epita.fr/repo/debian/ stable/' >> /etc/apt/sources.list
-RUN apt-get update; apt-get -y install libspot-dev
+# Based on https://gitlab.lre.epita.fr/spot/spot/-/issues/544#note_29198
+RUN wget -q -O - https://www.lrde.epita.fr/repo/debian.gpg | apt-key add - \
+    && echo 'deb [trusted=true] https://download.opensuse.org/repositories/home:/adl/xUbuntu_22.04/ ./' >/etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y libspot-dev
+
+# Manual installation
+#WORKDIR /opt/
+#RUN curl -L -o spot.tar.gz http://www.lrde.epita.fr/dload/spot/spot-${SPOT_VERSION}.tar.gz \
+#    && tar -xzf spot.tar.gz \
+#    && rm spot.tar.gz \
+#    && cd spot-${SPOT_VERSION} \
+#    && ./configure --disable-python \
+#    && make \
+#    && make install \
+#    && rm -r spot-${SPOT_VERSION}
 
 
 # Install MathSAT
 #################
 WORKDIR /opt/
-# Obtain MathSAT 5
-RUN curl -L -o mathsat5.tar.gz "https://mathsat.fbk.eu/download.php?file=mathsat-$mathsat_version-linux-x86_64.tar.gz"
-RUN tar -xzf mathsat5.tar.gz && mv mathsat-$mathsat_version-linux-x86_64 mathsat5 && rm mathsat5.tar.gz
+RUN curl -L -o mathsat5.tar.gz "https://mathsat.fbk.eu/download.php?file=mathsat-${MATHSAT_VERSION}-linux-x86_64.tar.gz" \
+    && tar -xzf mathsat5.tar.gz \
+    && mv mathsat-${MATHSAT_VERSION}-linux-x86_64 mathsat5 \
+    && rm mathsat5.tar.gz
+ENV MATHSAT_ROOT=/opt/mathsat5
 
 
 # Install SoPlex
 ################
-# Obtain Soplex
-RUN curl -L -o soplex.tar.gz https://github.com/scipopt/soplex/archive/refs/tags/release-$soplex_version.tar.gz
-RUN tar -xzf soplex.tar.gz && rm soplex.tar.gz && mv soplex-release-$soplex_version soplex
-RUN mkdir soplex/build
+WORKDIR /opt/
+RUN curl -L -o soplex.tar.gz https://github.com/scipopt/soplex/archive/refs/tags/release-${SOPLEX_VERSION}.tar.gz \
+    && tar -xzf soplex.tar.gz \
+    && rm soplex.tar.gz \
+    && mv soplex-release-${SOPLEX_VERSION} soplex \
+    && mkdir soplex/build
 WORKDIR /opt/soplex/build
-RUN cmake .. && make && make install
+RUN cmake .. \
+    && make \
+    && make install \
+    && rm -r /opt/soplex
+
 
 # Install Gurobi
 #################
 # From https://github.com/Gurobi/docker-optimizer/blob/master/11.0.0/Dockerfile
 WORKDIR /opt
-
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y\
-       ca-certificates  \
-       wget \
-    && update-ca-certificates \
-    && wget -v https://packages.gurobi.com/${GRB_SHORT_VERSION}/gurobi${GRB_VERSION}_linux64.tar.gz \
-    && tar -xvf gurobi${GRB_VERSION}_linux64.tar.gz  \
-    && rm -f gurobi${GRB_VERSION}_linux64.tar.gz \
+RUN update-ca-certificates \
+    && wget -v https://packages.gurobi.com/${GUROBI_SHORT_VERSION}/gurobi${GUROBI_VERSION}_linux64.tar.gz \
+    && tar -xvf gurobi${GUROBI_VERSION}_linux64.tar.gz  \
+    && rm -f gurobi${GUROBI_VERSION}_linux64.tar.gz \
     && mv -f gurobi* gurobi \
     && rm -rf gurobi/linux64/docs
 
-ENV GUROBI_HOME /opt/gurobi/linux64
-ENV PATH $PATH:$GUROBI_HOME/bin
-ENV LD_LIBRARY_PATH $GUROBI_HOME/lib
+ENV GUROBI_HOME=/opt/gurobi/linux64
+ENV PATH=$PATH:$GUROBI_HOME/bin
+ENV LD_LIBRARY_PATH=$GUROBI_HOME/lib
