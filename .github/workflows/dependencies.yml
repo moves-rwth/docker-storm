@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         config:
-          - {tag: "latest", carlTag: "14.27", buildType: "Release"}
-          - {tag: "latest-debug", carlTag: "14.27-debug", buildType: "Debug"}
+          - {tag: "latest", carlTag: "14.28", buildType: "Release"}
+          - {tag: "latest-debug", carlTag: "14.28-debug", buildType: "Debug"}
 
     steps:
       - name: Git clone
