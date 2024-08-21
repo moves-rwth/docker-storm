@@ -1,7 +1,8 @@
 # Dockerfiles related to Storm
 
 All Docker containers related to Storm are hosted at the [movesrwth organization](https://hub.docker.com/u/movesrwth) on DockerHub.
-The Dockerfiles are present in the corresponding repositories.
+This repository provides Dockerfiles for the base images used by Storm.
+For the libraries [storm](https://github.com/moves-rwth/storm), [stormpy](https://github.com/moves-rwth/stormpy) and [carl-storm](https://github.com/moves-rwth/carl-storm), Dockerfiles and dedicated CI workflows for creating and deploying Docker images are available in the respective repositories.
 
 ## Actions
 Docker containers can be automatically generated via [Github Actions](https://github.com/moves-rwth/docker-storm/actions/).
@@ -10,17 +11,12 @@ Docker containers can be automatically generated via [Github Actions](https://gi
 
 ## File structure
 - [storm-basesystem](storm-basesystem): Dockerfile and build script for the Linux base images with the dependencies required by Storm.
-- [carl-storm](carl-storm): Build script for [Carl-storm library](https://github.com/moves-rwth/carl-storm).
-- [storm-dependencies](storm-dependencies): Dockerfile and build script preparing the dependencies for Storm (carl-storm, Spot, MathSAT, SoPlex)
-- [storm](storm): Build script for [Storm](https://github.com/moves-rwth/storm/).
-- [stormpy](stormpy): Build script for [stormpy](https://github.com/moves-rwth/stormpy/).
+- [storm-dependencies](storm-dependencies): Dockerfile and build script preparing the dependencies for Storm (carl-storm, Spot, MathSAT, SoPlex, etc.)
 - [doc](doc): General documentation, for example on building Docker containers for new releases.
 
 ## Configuration options
 - The configuration options are given at the top of each Dockerfile.
    A configuration `arg_name` can be changed from the commandline by adding `--build-arg <arg_name>=<value>`.
 - Common configurations options are:
-    * The base image `BASE_IMAGE` used for the Dockerfile.
-    * The CMake build type `build_type` can be set to either `Release` or `Debug`.
-    * The number of threads `no_threads` to use for parallel compilation.
+    * The base image `BASE_IMAGE` or `LINUX_BASE` used for the Dockerfile.
 - The resources for Docker (number of CPUs, memory, etc.) can be configured in the Docker settings.
