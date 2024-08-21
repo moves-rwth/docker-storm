@@ -15,10 +15,10 @@ MAINTAINER Matthias Volk <m.volk@tue.nl>
 # --build-arg <config_name>=<value>
 
 # Specify library versions
-ARG MATHSAT_VERSION=5.6.10
+ARG MATHSAT_VERSION=5.6.11
 ARG SPOT_VERSION=2.12
-ARG SOPLEX_VERSION=701
-ARG GUROBI_VERSION=11.0.2
+ARG SOPLEX_VERSION=710
+ARG GUROBI_VERSION=11.0.3
 ARG GUROBI_SHORT_VERSION=11.0
 
 # Carl-storm is already installed in the base image
