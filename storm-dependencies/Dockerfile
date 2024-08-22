@@ -8,7 +8,7 @@
 # Set base image
 ARG BASE_IMAGE=movesrwth/carl-storm:stable
 FROM $BASE_IMAGE
-MAINTAINER Matthias Volk <m.volk@tue.nl>
+LABEL org.opencontainers.image.authors="dev@stormchecker.org"
 
 # Specify configurations
 # These configurations can be set from the commandline with:

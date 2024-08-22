@@ -18,5 +18,5 @@ Docker containers can be automatically generated via [Github Actions](https://gi
 - The configuration options are given at the top of each Dockerfile.
    A configuration `arg_name` can be changed from the commandline by adding `--build-arg <arg_name>=<value>`.
 - Common configurations options are:
-    * The base image `BASE_IMAGE` or `LINUX_BASE` used for the Dockerfile.
+    * The base image `BASE_IMAGE` used for the Dockerfile.
 - The resources for Docker (number of CPUs, memory, etc.) can be configured in the Docker settings.
