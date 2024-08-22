@@ -1,53 +1,49 @@
 name: Build basesystem
 # Builds the Storm basesystem Docker images and deploys them to Dockerhub
+# Build is distributed across multiple runners based on:
+# https://docs.docker.com/build/ci/github-actions/multi-platform/#distribute-build-across-multiple-runners
 
 on:
   # needed to trigger the workflow manually
   workflow_dispatch:
 
-jobs:
-  buildDistro:
-    name: Build for ${{ matrix.distro.name }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        distro:
-          - {name: "ubuntu-20.04", baseImg: "ubuntu:20.04"}
-          - {name: "debian-11", baseImg: "debian:11"}
-          - {name: "ubuntu-22.04", baseImg: "ubuntu:22.04"}
-          - {name: "debian-12", baseImg: "debian:12"}
-          - {name: "ubuntu-24.04", baseImg: "ubuntu:24.04"}
-          - {name: "latest", baseImg: "ubuntu:rolling"}
-    steps:
-      - name: Git clone
-        uses: actions/checkout@v4
-      - name: Build from Dockerfile
-        run: docker build -f storm-basesystem/Dockerfile -t movesrwth/storm-basesystem:${{ matrix.distro.name }} . --build-arg LINUX_BASE=${{ matrix.distro.baseImg }}
-      - name: Login to Docker Hub
-        # Only login if using original repo
-        if: github.repository_owner == 'moves-rwth'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.STORM_CI_DOCKER_USERNAME }}
-          password: ${{ secrets.STORM_CI_DOCKER_TOKEN }}
-      - name: Deploy image
-        # Only deploy if using original repo
-        if: github.repository_owner == 'moves-rwth'
-        run: |
-          docker push movesrwth/storm-basesystem:${{ matrix.distro.name }}
+env:
+  IMAGE: movesrwth/storm-basesystem
 
-  buildMinimalDependencies:
-    name: Build minimial dependencies
+jobs:
+  build:
+    name: Build ${{ matrix.image.name }} on ${{ matrix.platform }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro:
-          - {name: "minimal_dependencies", baseImg: "ubuntu:rolling"}
+        image:
+          - {name: "ubuntu-20.04", baseImg: "ubuntu:20.04", file: "storm-basesystem/Dockerfile"}
+          - {name: "debian-11", baseImg: "debian:11", file: "storm-basesystem/Dockerfile"}
+          - {name: "ubuntu-22.04", baseImg: "ubuntu:22.04", file: "storm-basesystem/Dockerfile"}
+          - {name: "debian-12", baseImg: "debian:12", file: "storm-basesystem/Dockerfile"}
+          - {name: "ubuntu-24.04", baseImg: "ubuntu:24.04", file: "storm-basesystem/Dockerfile"}
+          - {name: "latest", baseImg: "ubuntu:rolling", file: "storm-basesystem/Dockerfile"}
+          - {name: "minimal_dependencies", baseImg: "ubuntu:rolling", file: "storm-basesystem/Dockerfile.minimal_dependencies"}
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
-      - name: Git clone
-        uses: actions/checkout@v4
-      - name: Build from Dockerfile
-        run: docker build -f storm-basesystem/Dockerfile.minimal_dependencies -t movesrwth/storm-basesystem:${{ matrix.distro.name }} . --build-arg LINUX_BASE=${{ matrix.distro.baseImg }}
+      - name: Prepare
+        # Sanitize platform name
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM=${platform//\//-}" >> $GITHUB_ENV
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,${{ matrix.image.name }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
         # Only login if using original repo
         if: github.repository_owner == 'moves-rwth'
@@ -55,8 +51,73 @@ jobs:
         with:
           username: ${{ secrets.STORM_CI_DOCKER_USERNAME }}
           password: ${{ secrets.STORM_CI_DOCKER_TOKEN }}
-      - name: Deploy image
-        # Only deploy if using original repo
-        if: github.repository_owner == 'moves-rwth'
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          file: ${{ matrix.image.file }}
+          build-args: |
+            BASE_IMAGE=${{ matrix.image.baseImg }}
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
+      - name: Export digest
         run: |
-          docker push movesrwth/storm-basesystem:${{ matrix.distro.name }}
+          mkdir -p /tmp/digests/${{ matrix.image.name }}
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${{ matrix.image.name }}/${digest#sha256:}"          
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.image.name }}-digests-${{ env.PLATFORM }}
+          path: /tmp/digests/${{ matrix.image.name }}/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    name: Merge manifests for ${{ matrix.image.name }}
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    strategy:
+      matrix:
+        image:
+          # Must be the same as above
+          - {name: "ubuntu-20.04"}
+          - {name: "debian-11"}
+          - {name: "ubuntu-22.04"}
+          - {name: "debian-12"}
+          - {name: "ubuntu-24.04"}
+          - {name: "latest"}
+          - {name: "minimal_dependencies"}
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests/${{ matrix.image.name }}
+          pattern: ${{ matrix.image.name }}-digests-*
+          merge-multiple: true
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,${{ matrix.image.name }}
+      - name: Login to Docker Hub
+        # Only login if using original repo
+        if: github.repository_owner == 'moves-rwth'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.STORM_CI_DOCKER_USERNAME }}
+          password: ${{ secrets.STORM_CI_DOCKER_TOKEN }}
+      - name: Create manifest list and push
+        working-directory: /tmp/digests/${{ matrix.image.name }}
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< '${{ steps.meta.outputs.json}}') \
+            $(printf '${{ env.IMAGE }}@sha256:%s ' *)
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.IMAGE }}:${{ steps.meta.outputs.version }}
