@@ -1,14 +1,14 @@
 # Base Dockerfile for Storm dependencies
 ########################################
 # The Docker image can be built by executing:
-# docker build -t movesrwth/storm-basesystem:latest .
+# docker build -t yourusername/storm-basesystem .
 # A different Linux base system image can be set from the commandline with:
-# --build-arg LINUX_BASE=<new_base_image>
+# --build-arg BASE_IMAGE=<new_base_image>
 
 # Set Linux base image
-ARG LINUX_BASE=ubuntu:rolling
-FROM $LINUX_BASE
-MAINTAINER Matthias Volk <m.volk@tue.nl>
+ARG BASE_IMAGE=ubuntu:rolling
+FROM $BASE_IMAGE
+LABEL org.opencontainers.image.authors="dev@stormchecker.org"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
