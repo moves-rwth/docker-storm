@@ -60,7 +60,7 @@ jobs:
           # Set build arguments
           build-args: |
             BASE_IMAGE=${{ matrix.image.baseImg }}
-            no_threads=${NR_JOBS}
+            no_threads=${{ env.NR_JOBS }}
           platforms: ${{ matrix.platform.name }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
