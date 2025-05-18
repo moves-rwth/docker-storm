@@ -17,8 +17,14 @@ jobs:
     strategy:
       matrix:
         image:
-          - {name: "latest", baseImg: "movesrwth/carl-storm:14.28", file: "storm-dependencies/Dockerfile"}
-          - {name: "latest-debug", baseImg: "movesrwth/carl-storm:14.28-debug", file: "storm-dependencies/Dockerfile"}
+          - {name: "latest",
+             baseImg: "movesrwth/carl-storm:14.29",
+             file: "storm-dependencies/Dockerfile"
+            }
+          - {name: "latest-debug",
+             baseImg: "movesrwth/carl-storm:14.29-debug",
+             file: "storm-dependencies/Dockerfile"
+            }
         platform:
           - {name: linux/amd64, runner: "ubuntu-latest"}
           - {name: linux/arm64, runner: "ubuntu-24.04-arm"}
@@ -49,6 +55,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: ${{ matrix.image.file }}
+          # Set build arguments
           build-args: |
             BASE_IMAGE=${{ matrix.image.baseImg }}
           platforms: ${{ matrix.platform.name }}

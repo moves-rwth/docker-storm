@@ -17,11 +17,26 @@ jobs:
     strategy:
       matrix:
         image:
-          - {name: "ubuntu-22.04", baseImg: "ubuntu:22.04", file: "storm-basesystem/Dockerfile"}
-          - {name: "debian-12", baseImg: "debian:12", file: "storm-basesystem/Dockerfile"}
-          - {name: "ubuntu-24.04", baseImg: "ubuntu:24.04", file: "storm-basesystem/Dockerfile"}
-          - {name: "latest", baseImg: "ubuntu:rolling", file: "storm-basesystem/Dockerfile"}
-          - {name: "minimal_dependencies", baseImg: "ubuntu:rolling", file: "storm-basesystem/Dockerfile.minimal_dependencies"}
+          - {name: "ubuntu-22.04",
+             baseImg: "ubuntu:22.04",
+             file: "storm-basesystem/Dockerfile"
+            }
+          - {name: "debian-12",
+             baseImg: "debian:12",
+             file: "storm-basesystem/Dockerfile"
+            }
+          - {name: "ubuntu-24.04",
+             baseImg: "ubuntu:24.04",
+             file: "storm-basesystem/Dockerfile"
+            }
+          - {name: "latest",
+             baseImg: "ubuntu:rolling",
+             file: "storm-basesystem/Dockerfile"
+            }
+          - {name: "minimal_dependencies",
+             baseImg: "ubuntu:rolling",
+             file: "storm-basesystem/Dockerfile.minimal_dependencies"
+            }
         platform:
           - {name: linux/amd64, runner: "ubuntu-latest"}
           - {name: linux/arm64, runner: "ubuntu-24.04-arm"}
@@ -52,6 +67,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: ${{ matrix.image.file }}
+          # Set build arguments
           build-args: |
             BASE_IMAGE=${{ matrix.image.baseImg }}
           platforms: ${{ matrix.platform.name }}
