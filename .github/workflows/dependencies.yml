@@ -18,11 +18,11 @@ jobs:
       matrix:
         image:
           - {name: "latest",
-             baseImg: "movesrwth/carl-storm:14.28",
+             baseImg: "movesrwth/carl-storm:14.29",
              file: "storm-dependencies/Dockerfile"
             }
           - {name: "latest-debug",
-             baseImg: "movesrwth/carl-storm:14.28-debug",
+             baseImg: "movesrwth/carl-storm:14.29-debug",
              file: "storm-dependencies/Dockerfile"
             }
         platform:
