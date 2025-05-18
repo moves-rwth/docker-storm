@@ -9,6 +9,8 @@ on:
 
 env:
   IMAGE: movesrwth/storm-dependencies
+  # GitHub runners currently have 4 cores
+  NR_JOBS: "4"
 
 jobs:
   build:
@@ -58,6 +60,7 @@ jobs:
           # Set build arguments
           build-args: |
             BASE_IMAGE=${{ matrix.image.baseImg }}
+            no_threads=${NR_JOBS}
           platforms: ${{ matrix.platform.name }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true

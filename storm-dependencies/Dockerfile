@@ -15,6 +15,9 @@ LABEL org.opencontainers.image.authors="dev@stormchecker.org"
 # These configurations can be set from the commandline with:
 # --build-arg <config_name>=<value>
 
+# Specify number of threads to use for parallel compilation
+ARG no_threads=2
+
 # Specify library versions
 ARG MATHSAT_VERSION=5.6.11
 ARG SPOT_VERSION=2.13
@@ -51,8 +54,8 @@ RUN curl -L -o spot.tar.gz http://www.lre.epita.fr/dload/spot/spot-${SPOT_VERSIO
     && rm spot.tar.gz \
     && cd spot-${SPOT_VERSION} \
     && ./configure --disable-python \
-    && make \
-    && make install \
+    && make -j $no_threads \
+    && make install -j $no_threads \
     && cd /opt \
     && rm -r spot-${SPOT_VERSION}
 
@@ -77,8 +80,8 @@ RUN curl -L -o soplex.tar.gz https://github.com/scipopt/soplex/archive/refs/tags
     && mkdir soplex/build \
     && cd soplex/build \
     && cmake .. \
-    && make \
-    && make install \
+    && make -j $no_threads \
+    && make install -j $no_threads \
     && rm -r /opt/soplex
 
 
