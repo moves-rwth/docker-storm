@@ -16,9 +16,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 # - ca-certificates is needed for cloning from Github
 # - all other dependencies are the required packages for Storm (see https://www.stormchecker.org/documentation/obtain-storm/dependencies.html#-debian-and--ubuntu)
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    automake \
     ca-certificates \
     build-essential \
-    automake \
     cmake \
     git \
     libboost-all-dev \

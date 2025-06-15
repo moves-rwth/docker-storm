@@ -16,17 +16,17 @@ ENV DEBIAN_FRONTEND=noninteractive
 # - ca-certificates is needed for cloning from Github
 # - all other dependencies are the recommended packages for Storm (see https://www.stormchecker.org/documentation/obtain-storm/dependencies.html#-debian-and--ubuntu)
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
+    automake \
     ca-certificates \
     build-essential \
-    git \
     cmake \
+    git \
     libboost-all-dev \
     libcln-dev \
-    libgmp-dev \
     libginac-dev \
-    automake \
     libglpk-dev \
+    libgmp-dev \
     libhwloc-dev \
-    libz3-dev \
+    libeigen3-dev \
     libxerces-c-dev \
-    libeigen3-dev
+    libz3-dev
