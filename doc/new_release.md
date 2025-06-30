@@ -10,7 +10,6 @@ The following steps should be performed after releasing a new Storm version.
      Also create Docker images for the `stable` version.
 
 3. Create storm-dependencies
-   * Update the Carl version in `.github/workflows/dependencies.yml`.
    * Trigger the action [Build base with dependencies](https://github.com/moves-rwth/docker-storm/actions/workflows/dependencies.yml) in the CI to create Docker images for [storm-dependencies](https://hub.docker.com/r/movesrwth/storm-dependencies/).
 
 4. Create Storm
