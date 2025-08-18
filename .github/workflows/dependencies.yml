@@ -90,7 +90,7 @@ jobs:
           - {name: "latest-debug"}
     steps:
       - name: Download digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: ${{ runner.temp }}/digests/${{ matrix.image.name }}
           pattern: ${{ matrix.image.name }}-digests-*
