@@ -1,7 +1,7 @@
 The following steps should be performed after releasing a new Storm version.
 
 1. Update storm-basesystem
-   * Add new versions of Ubuntu and Debian as base images to the CI configuration file `.github/workflows/basesystem.yml`.
+   * Add new versions of Ubuntu and Debian as base images to the CI configuration file `.github/workflows/basesystem.yml`. Make sure to add the same names also in the merge step.
    * Remove old versions of Ubuntu and Debian which are not supported anymore from the same configuration file.
    * Trigger the action [Build basesystem](https://github.com/moves-rwth/docker-storm/actions/workflows/basesystem.yml) in the CI to create Docker images for [storm-basesystem](https://hub.docker.com/r/movesrwth/storm-basesystem/).
 
