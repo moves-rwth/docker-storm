@@ -17,10 +17,6 @@ jobs:
     strategy:
       matrix:
         image:
-          - {name: "ubuntu-22.04",
-             baseImg: "ubuntu:22.04",
-             file: "storm-basesystem/Dockerfile"
-            }
           - {name: "debian-12",
              baseImg: "debian:12",
              file: "storm-basesystem/Dockerfile"
@@ -99,7 +95,6 @@ jobs:
       matrix:
         image:
           # Must be the same as above
-          - {name: "ubuntu-22.04"}
           - {name: "debian-12"}
           - {name: "ubuntu-24.04"}
           - {name: "debian-13"}
