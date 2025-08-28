@@ -10,6 +10,12 @@ The following steps should be performed after releasing a new Storm version.
      Also create Docker images for the `stable` version.
 
 3. Create storm-dependencies
+   * Update the versions of the dependencies used in `storm-dependencies/Dockerfile`:
+      * [MathSAT](https://mathsat.fbk.eu/download.html)
+      * [Spot](https://spot.lre.epita.fr/install.html)
+      * [Soplex](https://soplex.zib.de/)
+      * [Gurobi](https://github.com/Gurobi/docker-optimizer/tree/master)
+      * [Carl-storm](https://github.com/moves-rwth/carl-storm/releases) is automatically updated by using the `stable` version.
    * Trigger the action [Build base with dependencies](https://github.com/moves-rwth/docker-storm/actions/workflows/dependencies.yml) in the CI to create Docker images for [storm-dependencies](https://hub.docker.com/r/movesrwth/storm-dependencies/).
 
 4. Create Storm

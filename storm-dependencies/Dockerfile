@@ -20,9 +20,9 @@ ARG no_threads=2
 
 # Specify library versions
 ARG MATHSAT_VERSION=5.6.11
-ARG SPOT_VERSION=2.13.1
-ARG SOPLEX_VERSION=714
-ARG GUROBI_VERSION=12.0.2
+ARG SPOT_VERSION=2.14.1
+ARG SOPLEX_VERSION=715
+ARG GUROBI_VERSION=12.0.3
 ARG GUROBI_SHORT_VERSION=12.0
 
 # Carl-storm is already installed in the base image
@@ -41,15 +41,9 @@ RUN apt-get -y update \
 
 # Install Spot
 ##############
-# Based on https://gitlab.lre.epita.fr/spot/spot/-/issues/544#note_29198
-#RUN wget -q -O - https://www.lrde.epita.fr/repo/debian.gpg | apt-key add - \
-#    && echo 'deb [trusted=true] https://download.opensuse.org/repositories/home:/adl/xUbuntu_22.04/ ./' >/etc/apt/sources.list \
-#    && apt-get update \
-#    && apt-get install -y libspot-dev
-
 # Manual installation
 WORKDIR /opt/
-RUN curl -L -o spot.tar.gz http://www.lre.epita.fr/dload/spot/spot-${SPOT_VERSION}.tar.gz \
+RUN curl -L -o spot.tar.gz http://www.lrde.epita.fr/dload/spot/spot-${SPOT_VERSION}.tar.gz \
     && tar -xzf spot.tar.gz \
     && rm spot.tar.gz \
     && cd spot-${SPOT_VERSION} \
@@ -63,9 +57,14 @@ RUN curl -L -o spot.tar.gz http://www.lre.epita.fr/dload/spot/spot-${SPOT_VERSIO
 # Install MathSAT
 #################
 WORKDIR /opt/
-RUN curl -L -o mathsat5.tar.gz "https://mathsat.fbk.eu/release/mathsat-${MATHSAT_VERSION}-linux-x86_64.tar.gz" \
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+        export MATHSAT_PLATFORM="aarch64"; \
+    else \
+        export MATHSAT_PLATFORM="x86_64"; \
+    fi \
+    && curl -L -o mathsat5.tar.gz "https://mathsat.fbk.eu/release/mathsat-${MATHSAT_VERSION}-linux-${MATHSAT_PLATFORM}-reentrant.tar.gz" \
     && tar -xzf mathsat5.tar.gz \
-    && mv mathsat-${MATHSAT_VERSION}-linux-x86_64 mathsat5 \
+    && mv mathsat-${MATHSAT_VERSION}-linux-${MATHSAT_PLATFORM}-reentrant mathsat5 \
     && rm mathsat5.tar.gz
 ENV MATHSAT_ROOT=/opt/mathsat5
 
