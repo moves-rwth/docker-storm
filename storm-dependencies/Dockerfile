@@ -31,9 +31,9 @@ ARG GUROBI_SHORT_VERSION=12.0
 RUN apt-get -y update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
-	curl \
-	gnupg2 \
-	wget \
+        curl \
+        gnupg2 \
+        wget \
     && update-ca-certificates
 
 
