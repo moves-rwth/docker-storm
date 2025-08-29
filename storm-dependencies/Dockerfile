@@ -6,7 +6,7 @@
 # --build-arg BASE_IMAGE=<new_base_image>
 
 # Set base image
-ARG BASE_IMAGE=movesrwth/carl-storm:stable
+ARG BASE_IMAGE=movesrwth/storm-basesystem:latest
 FROM $BASE_IMAGE
 ARG TARGETPLATFORM
 LABEL org.opencontainers.image.authors="dev@stormchecker.org"
@@ -24,8 +24,6 @@ ARG SPOT_VERSION=2.14.1
 ARG SOPLEX_VERSION=715
 ARG GUROBI_VERSION=12.0.3
 ARG GUROBI_SHORT_VERSION=12.0
-
-# Carl-storm is already installed in the base image
 
 
 # Install additional packages

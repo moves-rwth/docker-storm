@@ -20,11 +20,7 @@ jobs:
       matrix:
         image:
           - {name: "latest",
-             baseImg: "movesrwth/carl-storm:stable",
-             file: "storm-dependencies/Dockerfile"
-            }
-          - {name: "latest-debug",
-             baseImg: "movesrwth/carl-storm:stable-debug",
+             baseImg: "movesrwth/storm-basesystem:latest",
              file: "storm-dependencies/Dockerfile"
             }
         platform:
@@ -87,7 +83,6 @@ jobs:
         image:
           # Must be the same as above
           - {name: "latest"}
-          - {name: "latest-debug"}
     steps:
       - name: Download digests
         uses: actions/download-artifact@v5
