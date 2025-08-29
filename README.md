@@ -11,7 +11,7 @@ Docker containers can be automatically generated via [Github Actions](https://gi
 
 ## File structure
 - [storm-basesystem](storm-basesystem): Dockerfile and build script for the Linux base images with the dependencies required by Storm.
-- [storm-dependencies](storm-dependencies): Dockerfile and build script preparing the dependencies for Storm (carl-storm, Spot, MathSAT, SoPlex, etc.)
+- [storm-dependencies](storm-dependencies): Dockerfile and build script preparing the dependencies for Storm (Spot, MathSAT, SoPlex, etc.)
 - [doc](doc): General documentation, for example on building Docker containers for new releases.
 
 ## Configuration options
