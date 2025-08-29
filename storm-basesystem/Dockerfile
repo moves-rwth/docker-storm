@@ -21,7 +21,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     git \
-    libboost-all-dev \
+    libboost-dev \
     libcln-dev \
     libginac-dev \
     libglpk-dev \
