@@ -19,8 +19,8 @@ LABEL org.opencontainers.image.authors="dev@stormchecker.org"
 ARG no_threads=2
 
 # Specify library versions
-ARG MATHSAT_VERSION=5.6.11
-ARG SPOT_VERSION=2.14.1
+ARG MATHSAT_VERSION=5.6.12
+ARG SPOT_VERSION=2.14.2
 ARG SOPLEX_VERSION=715
 ARG GUROBI_VERSION=12.0.3
 ARG GUROBI_SHORT_VERSION=12.0
@@ -60,9 +60,9 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
     else \
         export MATHSAT_PLATFORM="x86_64"; \
     fi \
-    && curl -L -o mathsat5.tar.gz "https://mathsat.fbk.eu/release/mathsat-${MATHSAT_VERSION}-linux-${MATHSAT_PLATFORM}-reentrant.tar.gz" \
+    && curl -L -o mathsat5.tar.gz "https://mathsat.fbk.eu/release/mathsat-${MATHSAT_VERSION}-linux-${MATHSAT_PLATFORM}.tar.gz" \
     && tar -xzf mathsat5.tar.gz \
-    && mv mathsat-${MATHSAT_VERSION}-linux-${MATHSAT_PLATFORM}-reentrant mathsat5 \
+    && mv mathsat-${MATHSAT_VERSION}-linux-${MATHSAT_PLATFORM} mathsat5 \
     && rm mathsat5.tar.gz
 ENV MATHSAT_ROOT=/opt/mathsat5
 
