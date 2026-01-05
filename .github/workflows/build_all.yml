@@ -1,0 +1,33 @@
+name: Build all
+# Builds all Docker images for
+# - storm-basesystem
+# - storm-dependencies
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # run monthly
+    - cron: '0 10 3 * *'
+  pull_request:
+
+
+jobs:
+  create_basesystem:
+    # Create Docker images for basesystem
+    uses: ./.github/workflows/basesystem.yml
+    with:
+      # Only push if using main on original repo (and not for pull requests or forks)
+      push: ${{ github.repository_owner == 'moves-rwth' && github.ref == 'refs/heads/main' }}
+    secrets: inherit
+
+  create_dependencies:
+    # Create Docker images for dependencies
+    needs: create_basesystem
+    uses: ./.github/workflows/dependencies.yml
+    with:
+      # Only push if using main on original repo (and not for pull requests or forks)
+      push: ${{ github.repository_owner == 'moves-rwth' && github.ref == 'refs/heads/main' }}
+    secrets: inherit
+
