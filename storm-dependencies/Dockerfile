@@ -19,11 +19,11 @@ LABEL org.opencontainers.image.authors="dev@stormchecker.org"
 ARG no_threads=2
 
 # Specify library versions
-ARG MATHSAT_VERSION=5.6.12
-ARG SPOT_VERSION=2.14.2
-ARG SOPLEX_VERSION=715
-ARG GUROBI_VERSION=12.0.3
-ARG GUROBI_SHORT_VERSION=12.0
+ARG MATHSAT_VERSION=5.6.15
+ARG SPOT_VERSION=2.14.4
+ARG SOPLEX_VERSION=8.0.0
+ARG GUROBI_VERSION=13.0.0
+ARG GUROBI_SHORT_VERSION=13.0
 
 
 # Install additional packages
@@ -70,10 +70,10 @@ ENV MATHSAT_ROOT=/opt/mathsat5
 # Install SoPlex
 ################
 WORKDIR /opt/
-RUN curl -L -o soplex.tar.gz https://github.com/scipopt/soplex/archive/refs/tags/release-${SOPLEX_VERSION}.tar.gz \
+RUN curl -L -o soplex.tar.gz https://github.com/scipopt/soplex/archive/refs/tags/v${SOPLEX_VERSION}.tar.gz \
     && tar -xzf soplex.tar.gz \
     && rm soplex.tar.gz \
-    && mv soplex-release-${SOPLEX_VERSION} soplex \
+    && mv soplex-${SOPLEX_VERSION} soplex \
     && mkdir soplex/build \
     && cd soplex/build \
     && cmake .. \
