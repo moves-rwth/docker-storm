@@ -81,7 +81,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ matrix.image.name }}-digests-${{ env.PLATFORM }}
+          name: dependencies-${{ matrix.image.name }}-digests-${{ env.PLATFORM }}
           path: ${{ runner.temp }}/digests/dependencies-${{ matrix.image.name }}/*
           if-no-files-found: error
           retention-days: 1
@@ -102,7 +102,7 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           path: ${{ runner.temp }}/digests/dependencies-${{ matrix.image.name }}
-          pattern: ${{ matrix.image.name }}-digests-*
+          pattern: dependencies-${{ matrix.image.name }}-digests-*
           merge-multiple: true
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
