@@ -5,7 +5,7 @@ This repository provides Dockerfiles for the base images used by Storm.
 For the libraries [storm](https://github.com/moves-rwth/storm), [stormpy](https://github.com/moves-rwth/stormpy) and [carl-storm](https://github.com/moves-rwth/carl-storm), Dockerfiles and dedicated CI workflows for creating and deploying Docker images are available in the respective repositories.
 
 ## Actions
-Docker containers can be automatically generated via [Github Actions](https://github.com/moves-rwth/docker-storm/actions/).
+Docker containers can be automatically generated via [Github Actions](https://github.com/stormchecker/docker-storm/actions/).
 - `Build basesystem`: builds all base systems for Storm.
 - `Build base with dependencies`: builds Docker containers containing all dependencies for Storm.
 
