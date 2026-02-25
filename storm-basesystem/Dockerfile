@@ -28,6 +28,5 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     libglpk-dev \
     libgmp-dev \
     libhwloc-dev \
-    libeigen3-dev \
     libxerces-c-dev \
     libz3-dev
