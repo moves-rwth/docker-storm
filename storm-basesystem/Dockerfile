@@ -21,6 +21,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     git \
+    libarchive-dev \
     libboost-dev \
     libcln-dev \
     libginac-dev \
