@@ -116,7 +116,7 @@ jobs:
           - {name: "minimal_dependencies"}
     steps:
       - name: Download digests
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: ${{ runner.temp }}/digests/basesystem-${{ matrix.image.name }}
           pattern: basesystem-${{ matrix.image.name }}-digests-*
