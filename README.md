@@ -2,7 +2,7 @@
 
 All Docker containers related to Storm are hosted at the [movesrwth organization](https://hub.docker.com/u/movesrwth) on DockerHub.
 This repository provides Dockerfiles for the base images used by Storm.
-For the libraries [storm](https://github.com/moves-rwth/storm), [stormpy](https://github.com/moves-rwth/stormpy) and [carl-storm](https://github.com/moves-rwth/carl-storm), Dockerfiles and dedicated CI workflows for creating and deploying Docker images are available in the respective repositories.
+For the libraries [storm](https://github.com/stormchecker/storm), [stormpy](https://github.com/stormchecker/stormpy) and [carl-storm](https://github.com/stormchecker/carl-storm), Dockerfiles and dedicated CI workflows for creating and deploying Docker images are available in the respective repositories.
 
 ## Actions
 Docker containers can be automatically generated via [Github Actions](https://github.com/stormchecker/docker-storm/actions/).
