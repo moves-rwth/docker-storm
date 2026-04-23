@@ -43,6 +43,10 @@ jobs:
              baseImg: "debian:13",
              file: "storm-basesystem/Dockerfile"
             }
+          - {name: "ubuntu-26.04",
+             baseImg: "ubuntu:26.04",
+             file: "storm-basesystem/Dockerfile"
+            }
           - {name: "latest",
              baseImg: "ubuntu:rolling",
              file: "storm-basesystem/Dockerfile"
@@ -112,6 +116,7 @@ jobs:
           - {name: "debian-12"}
           - {name: "ubuntu-24.04"}
           - {name: "debian-13"}
+          - {name: "ubuntu-26.04"}
           - {name: "latest"}
           - {name: "minimal_dependencies"}
     steps:

@@ -19,9 +19,9 @@ LABEL org.opencontainers.image.authors="dev@stormchecker.org"
 ARG no_threads=2
 
 # Specify library versions
-ARG MATHSAT_VERSION=5.6.15
+ARG MATHSAT_VERSION=5.6.16
 ARG SPOT_VERSION=2.14.5
-ARG SOPLEX_VERSION=8.0.1
+ARG SOPLEX_VERSION=8.0.2
 ARG GUROBI_VERSION=13.0.1
 ARG GUROBI_SHORT_VERSION=13.0
 
