@@ -27,5 +27,6 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     libginac-dev \
     libglpk-dev \
     libgmp-dev \
+    libhighs-dev \
     libxerces-c-dev \
     libz3-dev
