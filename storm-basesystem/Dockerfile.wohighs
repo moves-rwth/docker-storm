@@ -1,5 +1,7 @@
 # Base Dockerfile for Storm dependencies
 ########################################
+# This image is without the HiGHS library which is not
+# supported by Debian 12 and Ubuntu 24.04
 # The Docker image can be built by executing:
 # docker build -t yourusername/storm-basesystem .
 # A different Linux base system image can be set from the commandline with:
@@ -27,6 +29,5 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     libginac-dev \
     libglpk-dev \
     libgmp-dev \
-    libhighs-dev \
     libxerces-c-dev \
     libz3-dev

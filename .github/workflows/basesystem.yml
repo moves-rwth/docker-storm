@@ -33,11 +33,11 @@ jobs:
         image:
           - {name: "debian-12",
              baseImg: "debian:12",
-             file: "storm-basesystem/Dockerfile"
+             file: "storm-basesystem/Dockerfile.wohighs"
             }
           - {name: "ubuntu-24.04",
              baseImg: "ubuntu:24.04",
-             file: "storm-basesystem/Dockerfile"
+             file: "storm-basesystem/Dockerfile.wohighs"
             }
           - {name: "debian-13",
              baseImg: "debian:13",
