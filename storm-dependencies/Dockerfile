@@ -21,6 +21,7 @@ ARG no_threads=2
 # Specify library versions
 ARG GUROBI_VERSION=13.0.2
 ARG GUROBI_SHORT_VERSION=13.0
+ARG HIGHS_VERSION=v1.15.1
 ARG MATHSAT_VERSION=5.6.17
 ARG SOPLEX_VERSION=8.0.3
 ARG SPOT_VERSION=2.15.1
@@ -56,6 +57,18 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
 ENV GUROBI_HOME=/opt/gurobi/linux
 ENV PATH=$PATH:$GUROBI_HOME/bin
 ENV LD_LIBRARY_PATH=$GUROBI_HOME/lib
+
+
+# Install HiGHS
+###############
+WORKDIR /opt/
+RUN git clone https://github.com/ERGO-Code/HiGHS -b ${HIGHS_VERSION} \
+    && mkdir HiGHS/build \
+    && cd HiGHS/build \
+    && cmake .. \
+    && make -j $no_threads \
+    && make install -j $no_threads \
+    && rm -r /opt/HiGHS
 
 
 # Install MathSAT
