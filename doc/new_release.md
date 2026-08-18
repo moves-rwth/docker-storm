@@ -7,8 +7,8 @@ The following steps should be performed to update the Docker images.
 
 ## Create storm-dependencies
 * Update the versions of the dependencies used in `storm-dependencies/Dockerfile`:
-  * [MathSAT](https://mathsat.fbk.eu/download.html)
-  * [Spot](https://spot.lre.epita.fr/install.html)
-  * [Soplex](https://soplex.zib.de/)
   * [Gurobi](https://github.com/Gurobi/docker-optimizer/tree/master)
+  * [MathSAT](https://mathsat.fbk.eu/download.html)
+  * [Soplex](https://soplex.zib.de/)
+  * [Spot](https://spot.lre.epita.fr/install.html)
 * Trigger the action [Build base with dependencies](https://github.com/stormchecker/docker-storm/actions/workflows/dependencies.yml) in the CI to create Docker images for [storm-dependencies](https://hub.docker.com/r/stormchecker/storm-dependencies/).
