@@ -19,11 +19,12 @@ LABEL org.opencontainers.image.authors="dev@stormchecker.org"
 ARG no_threads=2
 
 # Specify library versions
-ARG MATHSAT_VERSION=5.6.16
-ARG SPOT_VERSION=2.15.1
-ARG SOPLEX_VERSION=8.0.2
-ARG GUROBI_VERSION=13.0.1
+ARG GUROBI_VERSION=13.0.2
 ARG GUROBI_SHORT_VERSION=13.0
+ARG HIGHS_VERSION=v1.15.1
+ARG MATHSAT_VERSION=5.6.17
+ARG SOPLEX_VERSION=8.0.3
+ARG SPOT_VERSION=2.15.1
 
 
 # Install additional packages
@@ -37,19 +38,37 @@ RUN apt-get -y update \
     && update-ca-certificates
 
 
-# Install Spot
-##############
-# Manual installation
+# Install Gurobi
+#################
+# From https://github.com/Gurobi/docker-optimizer/blob/master/12.0.2/Dockerfile
+WORKDIR /opt
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+        export GRB_PLATFORM="armlinux64"; \
+    else \
+        export GRB_PLATFORM="linux64"; \
+    fi \
+    && wget -v https://packages.gurobi.com/${GUROBI_SHORT_VERSION}/gurobi${GUROBI_VERSION}_$GRB_PLATFORM.tar.gz \
+    && tar -xvf gurobi${GUROBI_VERSION}_$GRB_PLATFORM.tar.gz  \
+    && rm *.tar.gz \
+    && mv -f gurobi* gurobi \
+    && mv -f gurobi/$GRB_PLATFORM* gurobi/linux \
+    && rm -rf gurobi/linux/docs
+
+ENV GUROBI_HOME=/opt/gurobi/linux
+ENV PATH=$PATH:$GUROBI_HOME/bin
+ENV LD_LIBRARY_PATH=$GUROBI_HOME/lib
+
+
+# Install HiGHS
+###############
 WORKDIR /opt/
-RUN curl -L -o spot.tar.gz http://www.lrde.epita.fr/dload/spot/spot-${SPOT_VERSION}.tar.gz \
-    && tar -xzf spot.tar.gz \
-    && rm spot.tar.gz \
-    && cd spot-${SPOT_VERSION} \
-    && ./configure --disable-python \
+RUN git clone https://github.com/ERGO-Code/HiGHS -b ${HIGHS_VERSION} \
+    && mkdir HiGHS/build \
+    && cd HiGHS/build \
+    && cmake .. \
     && make -j $no_threads \
     && make install -j $no_threads \
-    && cd /opt \
-    && rm -r spot-${SPOT_VERSION}
+    && rm -r /opt/HiGHS
 
 
 # Install MathSAT
@@ -82,22 +101,18 @@ RUN curl -L -o soplex.tar.gz https://github.com/scipopt/soplex/archive/refs/tags
     && rm -r /opt/soplex
 
 
-# Install Gurobi
-#################
-# From https://github.com/Gurobi/docker-optimizer/blob/master/12.0.2/Dockerfile
-WORKDIR /opt
-RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        export GRB_PLATFORM="armlinux64"; \
-    else \
-        export GRB_PLATFORM="linux64"; \
-    fi \
-    && wget -v https://packages.gurobi.com/${GUROBI_SHORT_VERSION}/gurobi${GUROBI_VERSION}_$GRB_PLATFORM.tar.gz \
-    && tar -xvf gurobi${GUROBI_VERSION}_$GRB_PLATFORM.tar.gz  \
-    && rm *.tar.gz \
-    && mv -f gurobi* gurobi \
-    && mv -f gurobi/$GRB_PLATFORM* gurobi/linux \
-    && rm -rf gurobi/linux/docs
+# Install Spot
+##############
+# Manual installation
+WORKDIR /opt/
+RUN curl -L -o spot.tar.gz http://www.lrde.epita.fr/dload/spot/spot-${SPOT_VERSION}.tar.gz \
+    && tar -xzf spot.tar.gz \
+    && rm spot.tar.gz \
+    && cd spot-${SPOT_VERSION} \
+    && ./configure --disable-python \
+    && make -j $no_threads \
+    && make install -j $no_threads \
+    && cd /opt \
+    && rm -r spot-${SPOT_VERSION}
 
-ENV GUROBI_HOME=/opt/gurobi/linux
-ENV PATH=$PATH:$GUROBI_HOME/bin
-ENV LD_LIBRARY_PATH=$GUROBI_HOME/lib
+
