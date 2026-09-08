@@ -17,8 +17,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 # - all other dependencies are the recommended packages for Storm (see https://www.stormchecker.org/documentation/obtain-storm/dependencies.html#-debian-and--ubuntu)
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     automake \
-    ca-certificates \
     build-essential \
+    ca-certificates \
+    ccache \
     cmake \
     git \
     libarchive-dev \
