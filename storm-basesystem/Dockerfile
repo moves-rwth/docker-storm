@@ -20,6 +20,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     ca-certificates \
     build-essential \
     cmake \
+    ccache \
     git \
     libarchive-dev \
     libboost-dev \
